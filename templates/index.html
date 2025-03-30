@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>TradePilot</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">📊 TradePilot</div>
+    <div class="info">Аналітика + сигнали</div>
+    <button onclick="location.reload()">🔄 Оновити</button>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <a href="#">📈 Структура</a>
+      <a href="#">📍 Зони інтересу</a>
+      <a href="#">🎯 Таргети</a>
+      <a href="#">🛠 Побудова позиції</a>
+      <a href="#">📓 Щоденник</a>
+    </aside>
+
+    <section class="chart">
+      <iframe
+        src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_d1&symbol=BINANCE:BTCUSDT&interval=60&hidesidetoolbar=1&theme=light"
+        width="100%" height="100%" frameborder="0">
+      </iframe>
+    </section>
+  </main>
+</body>
+</html>
