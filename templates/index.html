@@ -1,65 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <title>TradePilot</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <title>TradePilot</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <div class="header">
-    <h1>📊 TradePilot</h1>
-    <select id="assetSelector" onchange="updateChart()">
-      {% for asset in assets %}
-        <option value="{{ asset.symbol }}">{{ asset.name }}</option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="content">
-    <div class="left-panel">
-      <h2>📁 Розділ: Статистика</h2>
-      <div id="stats">
-        <p>Тут буде аналітика сигналів (додамо далі).</p>
-      </div>
+    <div class="container">
+        <div class="sidebar">
+            <h2>📊 TradePilot</h2>
+            <button>🧠 Структура</button>
+            <button>📍 Зони інтересу</button>
+            <button>🎯 Таргети</button>
+            <button>🛠️ Побудова позиції</button>
+            <button>📘 Щоденник</button>
+            <button onclick="location.reload()">🔄 Оновити</button>
+            <select id="assetSelect" onchange="changeAsset(this)">
+                {% for asset in assets %}
+                    <option value="{{ asset.symbol }}" {% if asset.symbol == selected_asset.symbol %}selected{% endif %}>
+                        {{ asset.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="main">
+            <h1>Аналітика + сигнали</h1>
+            <div id="tradingview-widget-container"></div>
+        </div>
     </div>
 
-    <div class="chart-panel">
-      <div id="tradingview-widget-container"></div>
-    </div>
-  </div>
+    <script>
+        let selectedSymbol = "{{ selected_asset.symbol }}";
 
-  <script type="text/javascript">
-    let selectedSymbol = "{{ assets[0].symbol }}";
+        function changeAsset(select) {
+            const selected = select.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set("symbol", selected);
+            window.location.href = url.toString();
+        }
 
-    function updateChart() {
-      selectedSymbol = document.getElementById('assetSelector').value;
-      loadChart(selectedSymbol);
-    }
-
-    function loadChart(symbol) {
-      document.getElementById('tradingview-widget-container').innerHTML = "";
-      new TradingView.widget({
-        "width": "100%",
-        "height": 600,
-        "symbol": symbol,
-        "interval": "60",
-        "timezone": "Etc/UTC",
-        "theme": "light",
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "allow_symbol_change": true,
-        "container_id": "tradingview-widget-container"
-      });
-    }
-
-    window.onload = function () {
-      loadChart(selectedSymbol);
-    };
-  </script>
-
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+        new TradingView.widget({
+            "container_id": "tradingview-widget-container",
+            "autosize": true,
+            "symbol": selectedSymbol,
+            "interval": "60",
+            "timezone": "Etc/UTC",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": false,
+            "studies": [],
+            "show_popup_button": true,
+            "popup_width": "1000",
+            "popup_height": "650"
+        });
+    </script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 </body>
 </html>

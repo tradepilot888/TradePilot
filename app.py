@@ -1,19 +1,22 @@
-from flask import Flask, render_template, request
-import os
+from flask import Flask, render_template
 import json
 
 app = Flask(__name__)
 
-# Завантаження списку активів з файлу
-with open("assets.json", "r") as file:
-    ASSETS = json.load(file)
+def load_assets():
+    try:
+        with open("assets.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data.get("forex", [])
+    except Exception as e:
+        print("Помилка завантаження assets.json:", e)
+        return []
 
-@app.route('/')
+@app.route("/")
 def index():
-    selected_asset = request.args.get('asset', 'EURUSD')
-    return render_template('index.html', selected_asset=selected_asset, assets=ASSETS)
+    assets = load_assets()
+    selected_asset = assets[0] if assets else {"name": "EUR/USD", "symbol": "EURUSD"}
+    return render_template("index.html", selected_asset=selected_asset, assets=assets)
 
-# Запуск з правильним портом
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=10000)
