@@ -6,43 +6,35 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>📊 TradePilot</h2>
-            <button>🧠 Структура</button>
-            <button>📍 Зони інтересу</button>
-            <button>🎯 Таргети</button>
-            <button>🛠️ Побудова позиції</button>
-            <button>📘 Щоденник</button>
-            <button onclick="location.reload()">🔄 Оновити</button>
-            <select id="assetSelect" onchange="changeAsset(this)">
-                {% for asset in assets %}
+    <div class="sidebar">
+        <h1>📊 TradePilot</h1>
+        <button>📌 Структура</button>
+        <button>📍 Зони інтересу</button>
+        <button>🎯 Таргети</button>
+        <button>🛠️ Побудова позиції</button>
+        <button>📘 Щоденник</button>
+        <button onclick="location.reload()">📁 Оновити</button>
+        <form method="get" action="/">
+            <select name="symbol" onchange="this.form.submit()">
+                {% for asset in assets.forex %}
                     <option value="{{ asset.symbol }}" {% if asset.symbol == selected_asset.symbol %}selected{% endif %}>
                         {{ asset.name }}
                     </option>
                 {% endfor %}
             </select>
-        </div>
-        <div class="main">
-            <h1>Аналітика + сигнали</h1>
-            <div id="tradingview-widget-container"></div>
-        </div>
+        </form>
     </div>
 
-    <script>
-        let selectedSymbol = "{{ selected_asset.symbol }}";
+    <div class="main">
+        <h2>Аналітика + сигнали</h2>
+        <div id="tv_chart_container"></div>
+    </div>
 
-        function changeAsset(select) {
-            const selected = select.value;
-            const url = new URL(window.location.href);
-            url.searchParams.set("symbol", selected);
-            window.location.href = url.toString();
-        }
-
+    <!-- Тепер передаємо символ вже після рендеру -->
+    <script type="text/javascript">
         new TradingView.widget({
-            "container_id": "tradingview-widget-container",
-            "autosize": true,
-            "symbol": selectedSymbol,
+            "container_id": "tv_chart_container",
+            "symbol": "{{ selected_asset.symbol }}",
             "interval": "60",
             "timezone": "Etc/UTC",
             "theme": "light",
@@ -57,6 +49,7 @@
             "popup_height": "650"
         });
     </script>
+
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 </body>
 </html>
