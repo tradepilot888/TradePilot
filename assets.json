@@ -1,17 +1,5 @@
 {
     "forex": [
-      "EURUSD",
-      "GBPUSD",
-      "USDJPY",
-      "USDCAD",
-      "AUDUSD",
-      "NZDUSD",
-      "XAUUSD",
-      "GER40"
-    ],
-    "crypto": []
-  }{
-    "forex": [
       { "name": "EUR/USD", "symbol": "EURUSD" },
       { "name": "GBP/USD", "symbol": "GBPUSD" },
       { "name": "USD/JPY", "symbol": "USDJPY" },
@@ -19,10 +7,10 @@
       { "name": "USD/CAD", "symbol": "USDCAD" },
       { "name": "AUD/USD", "symbol": "AUDUSD" },
       { "name": "NZD/USD", "symbol": "NZDUSD" },
-      { "name": "GOLD (XAU/USD)", "symbol": "XAUUSD" },
+      { "name": "XAU/USD (Gold)", "symbol": "XAUUSD" },
       { "name": "GER40 (DAX)", "symbol": "GER40" },
       { "name": "SP500", "symbol": "SPXUSD" }
-    ]
+    ],
+    "crypto": []
   }
-  
   
