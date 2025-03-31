@@ -1,43 +1,65 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>TradePilot</title>
-  <link rel="stylesheet" href="/static/styles.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <h1>📊 TradePilot</h1>
-      <button>📈 Структура</button>
-      <button>📍 Зони інтересу</button>
-      <button>🎯 Таргети</button>
-      <button>🛠️ Побудова позиції</button>
-      <button>📓 Щоденник</button>
-    </aside>
-
-    <main class="main-content">
-      <h2>Аналітика + сигнали</h2>
-
-      <div class="tradingview-widget-container">
-        <iframe
-          src="https://www.tradingview.com/chart/?symbol=BINANCE:BTCUSDT"
-          width="100%" height="500" frameborder="0" allowtransparency="true"
-          scrolling="no"
-        ></iframe>
-      </div>
-
-      <div class="interest-section">
-        <h2>📍 Зони інтересу</h2>
-        <p>Ключові ділянки ринку, де зосереджена ліквідність або очікується реакція:</p>
-        <ul id="interest-zones">
-          <li>🔴 Ліквідність: 82,500 – 82,800</li>
-          <li>🟢 Підтримка: 81,900</li>
-          <li>🟠 Обʼємна зона: 83,400</li>
-        </ul>
-      </div>
-    </main>
+  <div class="header">
+    <h1>📊 TradePilot</h1>
+    <select id="assetSelector" onchange="updateChart()">
+      {% for asset in assets %}
+        <option value="{{ asset.symbol }}">{{ asset.name }}</option>
+      {% endfor %}
+    </select>
   </div>
+
+  <div class="content">
+    <div class="left-panel">
+      <h2>📁 Розділ: Статистика</h2>
+      <div id="stats">
+        <p>Тут буде аналітика сигналів (додамо далі).</p>
+      </div>
+    </div>
+
+    <div class="chart-panel">
+      <div id="tradingview-widget-container"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    let selectedSymbol = "{{ assets[0].symbol }}";
+
+    function updateChart() {
+      selectedSymbol = document.getElementById('assetSelector').value;
+      loadChart(selectedSymbol);
+    }
+
+    function loadChart(symbol) {
+      document.getElementById('tradingview-widget-container').innerHTML = "";
+      new TradingView.widget({
+        "width": "100%",
+        "height": 600,
+        "symbol": symbol,
+        "interval": "60",
+        "timezone": "Etc/UTC",
+        "theme": "light",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#f1f3f6",
+        "enable_publishing": false,
+        "allow_symbol_change": true,
+        "container_id": "tradingview-widget-container"
+      });
+    }
+
+    window.onload = function () {
+      loadChart(selectedSymbol);
+    };
+  </script>
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 </body>
 </html>

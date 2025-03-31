@@ -1,13 +1,13 @@
-import os
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
+import json
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    with open('assets.json', 'r') as file:
+        assets = json.load(file)['forex']
+    return render_template('index.html', assets=assets)
 
-# ⬇️ ОНОВЛЕНИЙ ЗАПУСК
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)
